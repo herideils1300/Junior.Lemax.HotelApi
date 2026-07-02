@@ -23,7 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistance\Migrations\" />
+    <Folder Include="Persistance\Migrations\Mssql\" />
+    <Folder Include="Persistance\Migrations\Postgresql\" />
+    <Folder Include="Persistance\Migrations\Sqlite\" />
   </ItemGroup>
 
 </Project>
