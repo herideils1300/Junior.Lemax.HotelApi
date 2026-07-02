@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using HotelApi.Application.Services.Hotels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HotelApi.Application
 {
@@ -6,6 +7,8 @@ namespace HotelApi.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddScoped<FilterHotelsByRadius>();
+            services.AddScoped<FilterHotelsByPriceRange>();
             return services;
         }
     }

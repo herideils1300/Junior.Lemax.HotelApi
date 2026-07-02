@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelApi.Application.Services.Abstract
 {
-    public interface IService<T>
+    public interface IServerBuilder
     {
-        T? Execute();
     }
 }
