@@ -1,9 +1,13 @@
-﻿namespace HotelApi.Domain.Data.Loaction.Dto
+﻿using HotelApi.Domain.Data.Users.Dto;
+
+namespace HotelApi.Domain.Data.Loaction.Dto
 {
     //TODO: Move to domain and delete
     public class LocationDto
     {
+        public int Id { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public List<HotelDto> Hotels { get; set; }
     }
 }
