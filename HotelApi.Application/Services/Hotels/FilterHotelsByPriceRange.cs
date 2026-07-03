@@ -31,10 +31,11 @@ namespace HotelApi.Application.Services.Hotels
 
         public HotelDto[]? Execute()
         {
-            if(lowBudget == 0 && highBudget == 0)
+            if(lowBudget == 0 && highBudget == 0 || lowBudget > highBudget)
             {
                 return hotels;
             }
+
             return hotels.Where(h => calculator.IsBetween(lowBudget, highBudget, (double)h.Price)).ToArray();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,10 +33,11 @@ namespace HotelApi.Application.Services.Hotels
 
         public HotelDto[]? Execute()
         {
-            if(radius == 0.0)
+            if(radius <= 0.0)
             {
                 return hotels;
             }
+
             var filteredHotels = hotels.Where((hotel) => calcultor.IsInRange(userLocation, new LocationQuery(hotel.Location), radius));
             return filteredHotels.ToArray();
         }
