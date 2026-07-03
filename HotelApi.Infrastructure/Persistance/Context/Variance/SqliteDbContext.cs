@@ -4,21 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HotelApi.Infrastructure.Persistance.Context.Variance
 {
     public class SqliteDbContext : GlobalContext
     {
-        public SqliteDbContext()
+        private readonly IConfiguration _configuration;
+        public SqliteDbContext(IConfiguration configuration)
             : base(new DbContextOptions<SqliteDbContext>())
         {
+            _configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("Data Source=hotel.db");
+                optionsBuilder.UseSqlite(_configuration.GetConnectionString("SqliteDefault") ?? "");
             }
         }
     }

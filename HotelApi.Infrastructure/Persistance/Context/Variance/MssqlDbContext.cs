@@ -4,14 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HotelApi.Infrastructure.Persistance.Context.Variance
 {
     public class MssqlDbContext : GlobalContext
     {
-        public MssqlDbContext()
+
+        private readonly IConfiguration _configuration;
+        public MssqlDbContext(IConfiguration configuration)
                 : base(new DbContextOptions<MssqlDbContext>())
         {
+            _configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -19,7 +23,8 @@ namespace HotelApi.Infrastructure.Persistance.Context.Variance
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-                    "Server=localhost;Database=HotelDb;Trusted_Connection=True;TrustServerCertificate=True;");
+                    _configuration.GetConnectionString("DefaultMssql" ?? "")
+                    );
             }
         }
     }
