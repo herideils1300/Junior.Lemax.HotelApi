@@ -6,6 +6,7 @@ using HotelApi.Domain.Data.Users.Dto;
 using HotelApi.Infrastructure.Persistance.Context.Variance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using SQLitePCL;
 
@@ -35,11 +36,9 @@ namespace HotelApi.Api
                 return BadRequest("Query cannot be null.");
             }
 
-            var hotels = from hotel in _context.Hotels
-                         join queryLocation in _context.Locations on hotel.Location equals queryLocation
-                         select hotel;
+            var hotels = _context.Hotels.Include(hotel => hotel.Location).ToArray();
 
-            _radiusFilter.SetParams(query.UserLocation, hotels.ToArray(), query.RadiusInKm ?? 0);
+            _radiusFilter.SetParams(query.UserLocation, hotels.ToArray(), query.RadiusInMiles ?? 0);
             HotelDto[]? radiusFilteredHotels = _radiusFilter.Execute();
 
             _priceFilter.SetParams(radiusFilteredHotels!, query.LowBudget ?? 0, query.HighBudget ?? 0);
