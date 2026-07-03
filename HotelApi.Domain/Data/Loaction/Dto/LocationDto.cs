@@ -2,7 +2,6 @@
 
 namespace HotelApi.Domain.Data.Loaction.Dto
 {
-    //TODO: Move to domain and delete
     public class LocationDto
     {
         public int Id { get; set; }

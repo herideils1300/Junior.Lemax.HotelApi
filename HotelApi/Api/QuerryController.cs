@@ -35,18 +35,17 @@ namespace HotelApi.Api
                 return BadRequest("Query cannot be null.");
             }
 
-
             var hotels = from hotel in _context.Hotels
                          join queryLocation in _context.Locations on hotel.Location equals queryLocation
                          select hotel;
 
-            //TODO: Cover use cases when query params might be null
             _radiusFilter.SetParams(query.UserLocation, hotels.ToArray(), query.RadiusInKm ?? 0);
-            _priceFilter.SetParams(hotels.ToArray(), query.LowBudget ?? 0, query.HighBudget ?? 0);
+            HotelDto[]? radiusFilteredHotels = _radiusFilter.Execute();
 
-            var filteredHotels = _radiusFilter.Execute();
+            _priceFilter.SetParams(radiusFilteredHotels!, query.LowBudget ?? 0, query.HighBudget ?? 0);
+            HotelDto[]? fullyFilteredHotels = _priceFilter.Execute();
 
-            return Ok();
+            return Ok(fullyFilteredHotels);
         }
     }
 }

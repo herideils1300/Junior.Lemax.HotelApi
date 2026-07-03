@@ -16,7 +16,6 @@ namespace HotelApi.Infrastructure
 
         private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddDbContext<MssqlDbContext>();
             return services;
         }
