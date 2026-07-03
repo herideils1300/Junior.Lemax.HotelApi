@@ -7,15 +7,12 @@ using HotelApi.Domain.Data.Loaction.Dto;
 using HotelApi.Domain.Data.Loaction.Params;
 using HotelApi.Domain.Data.Users.Dto;
 
-namespace HotelApi.Domain.Business.Geometry
+namespace HotelApi.Domain.Business.Calculus
 {
     public class Calculator
     {
-        public Calculator()
-        {
-        }
 
-        public double CalculateDistance(LocationQuery first, LocationQuery second)
+        private double CalculateDistance(LocationQuery first, LocationQuery second)
         {
             double latitudeDistance = Math.Abs(first.Latitude - second.Latitude);
             double longitudeDistance = Math.Abs(first.Longitude - second.Longitude);
