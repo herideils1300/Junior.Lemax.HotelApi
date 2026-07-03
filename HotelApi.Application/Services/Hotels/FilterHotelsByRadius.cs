@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HotelApi.Application.Services.Abstract;
-using HotelApi.Domain.Business.Geometry;
+using HotelApi.Domain.Business.Calculus;
 using HotelApi.Domain.Data.Loaction.Dto;
 using HotelApi.Domain.Data.Loaction.Params;
 using HotelApi.Domain.Data.Users.Dto;
@@ -32,6 +32,10 @@ namespace HotelApi.Application.Services.Hotels
 
         public HotelDto[]? Execute()
         {
+            if(radius == 0.0)
+            {
+                return hotels;
+            }
             var filteredHotels = hotels.Where((hotel) => calcultor.IsInRange(userLocation, new LocationQuery(hotel.Location), radius));
             return filteredHotels.ToArray();
         }
