@@ -1,14 +1,10 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using HotelApi.Application.Services.Hotels;
-using HotelApi.Domain.Data.Loaction.Dto;
+﻿using HotelApi.Application.Services.Hotels.Services;
+using HotelApi.Domain.Data.Location.Dto;
 using HotelApi.Domain.Data.Users.Dto;
 using HotelApi.Infrastructure.Persistance.Context.Variance;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using SQLitePCL;
 
 namespace HotelApi.Api
 {
@@ -18,14 +14,16 @@ namespace HotelApi.Api
     {
 
         private readonly MssqlDbContext _context;
-        private readonly FilterHotelsByRadius _radiusFilter;
-        private readonly FilterHotelsByPriceRange _priceFilter;
+        private readonly SortHotelsByDistance _distanceSort;
+        private readonly FilterByRadiusAndPrice _filterByRadiusAndPrice;
 
-        public QuerryController(MssqlDbContext context, FilterHotelsByRadius radiusFilter, FilterHotelsByPriceRange priceFilter)
+        public QuerryController(MssqlDbContext context, 
+            SortHotelsByDistance distanceSort,
+            FilterByRadiusAndPrice filterByRadius)
         {
             _context = context;
-            _radiusFilter = radiusFilter;
-            _priceFilter = priceFilter;
+            _distanceSort = distanceSort;
+            _filterByRadiusAndPrice = filterByRadius;
         }
 
         [HttpPost]
@@ -36,15 +34,13 @@ namespace HotelApi.Api
                 return BadRequest("Query cannot be null.");
             }
 
-            var hotels = _context.Hotels.Include(hotel => hotel.Location).ToArray();
+            _filterByRadiusAndPrice.SetParameters(_context, query);
+            HotelDto[]? filteredHotels = _filterByRadiusAndPrice.Execute();
 
-            _radiusFilter.SetParams(query.UserLocation, hotels.ToArray(), query.RadiusInMiles ?? 0);
-            HotelDto[]? radiusFilteredHotels = _radiusFilter.Execute();
+            _distanceSort.SetParams(filteredHotels!.ToArray(), query.UserLocation);
+            HotelDto[]? sortedHotels = _distanceSort.Execute();
 
-            _priceFilter.SetParams(radiusFilteredHotels!, query.LowBudget ?? 0, query.HighBudget ?? 0);
-            HotelDto[]? fullyFilteredHotels = _priceFilter.Execute();
-
-            return Ok(fullyFilteredHotels);
+            return Ok(sortedHotels);
         }
     }
 }

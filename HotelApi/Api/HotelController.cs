@@ -1,4 +1,4 @@
-﻿using HotelApi.Domain.Data.Loaction.Dto;
+﻿using HotelApi.Domain.Data.Location.Dto;
 using HotelApi.Domain.Data.Users.Dto;
 using HotelApi.Infrastructure.Persistance.Context.Variance;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,9 @@ namespace HotelApi.Api
         {
             try
             {
-                IEnumerable<HotelDto> hotels = _context.Hotels.Include<HotelDto, LocationDto>(hotel => hotel.Location).AsEnumerable();
+                IEnumerable<HotelDto> hotels = _context.Hotels
+                    .Include<HotelDto, LocationDto>(hotel => hotel.Location)
+                    .AsEnumerable();
 
                 return Ok(hotels);
             }
@@ -105,8 +107,7 @@ namespace HotelApi.Api
                     existingHotel.Location = hotel.Location;
                 }
 
-
-                    _context.SaveChanges();
+                _context.SaveChanges();
 
                 return Ok(existingHotel);
             }
