@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HotelApi.Domain.Data.Loaction.Dto;
+using HotelApi.Domain.Data.Location.Dto;
 
 namespace HotelApi.Domain.Data.Users.Dto
 {

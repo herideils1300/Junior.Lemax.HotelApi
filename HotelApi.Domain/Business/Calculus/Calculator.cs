@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HotelApi.Domain.Data.Loaction.Dto;
-using HotelApi.Domain.Data.Loaction.Params;
+using HotelApi.Domain.Data.Location.Dto;
+using HotelApi.Domain.Data.Location.Params;
 using HotelApi.Domain.Data.Users.Dto;
 
 namespace HotelApi.Domain.Business.Calculus
@@ -12,21 +12,17 @@ namespace HotelApi.Domain.Business.Calculus
     public class Calculator
     {
 
-        private double CalculateDistance(LocationQuery first, LocationQuery second)
+        public double CalculateDistance(LocationQuery first, LocationQuery second)
         {
             double latitudeDistance = Math.Abs(first.Latitude - second.Latitude);
             double longitudeDistance = Math.Abs(first.Longitude - second.Longitude);
             return Math.Sqrt(Math.Pow(latitudeDistance, 2) + Math.Pow(longitudeDistance, 2));
         }
 
-        public bool IsInRange(LocationQuery first, LocationQuery second, double radius)
+        public int SortLocation(LocationQuery userLocation, LocationQuery first, LocationQuery second)
         {
-            return CalculateDistance(first, second) < radius;
+            return (CalculateDistance(userLocation, first) < CalculateDistance(userLocation, second)) ? -1 : 1;
         }
 
-        public bool IsBetween(double lower, double upper, double price)
-        {
-            return (price <= upper) && (price >= lower);
-        }
     }
 }

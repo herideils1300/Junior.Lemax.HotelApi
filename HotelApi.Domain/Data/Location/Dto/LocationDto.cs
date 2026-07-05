@@ -1,6 +1,6 @@
 ﻿using HotelApi.Domain.Data.Users.Dto;
 
-namespace HotelApi.Domain.Data.Loaction.Dto
+namespace HotelApi.Domain.Data.Location.Dto
 {
     public class LocationDto
     {
