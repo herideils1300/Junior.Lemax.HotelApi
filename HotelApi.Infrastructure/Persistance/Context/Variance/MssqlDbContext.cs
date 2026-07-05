@@ -10,7 +10,6 @@ namespace HotelApi.Infrastructure.Persistance.Context.Variance
 {
     public class MssqlDbContext : GlobalContext
     {
-        //TODO: Add protected constructor to other contexts as well, to avoid the error "No parameterless constructor defined for this object."
         private readonly IConfiguration _config;
         public MssqlDbContext(IConfiguration config)
                 : base(new DbContextOptions<MssqlDbContext>())

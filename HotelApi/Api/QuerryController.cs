@@ -16,14 +16,17 @@ namespace HotelApi.Api
         private readonly MssqlDbContext _context;
         private readonly SortHotelsByDistance _distanceSort;
         private readonly FilterByRadiusAndPrice _filterByRadiusAndPrice;
+        private readonly PaginateHotels _paginateHotels;
 
-        public QuerryController(MssqlDbContext context, 
+        public QuerryController(MssqlDbContext context,
             SortHotelsByDistance distanceSort,
-            FilterByRadiusAndPrice filterByRadius)
+            FilterByRadiusAndPrice filterByRadius,
+            PaginateHotels paginateHotels)
         {
             _context = context;
             _distanceSort = distanceSort;
             _filterByRadiusAndPrice = filterByRadius;
+            _paginateHotels = paginateHotels;
         }
 
         [HttpPost]
@@ -39,6 +42,9 @@ namespace HotelApi.Api
 
             _distanceSort.SetParams(filteredHotels!.ToArray(), query.UserLocation);
             HotelDto[]? sortedHotels = _distanceSort.Execute();
+
+            _paginateHotels.SetParams(sortedHotels!, query);
+            HotelDto[]? paginatedHotels = _paginateHotels.Execute();
 
             return Ok(sortedHotels);
         }

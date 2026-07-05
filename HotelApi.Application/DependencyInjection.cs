@@ -10,6 +10,7 @@ namespace HotelApi.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddScoped<SortHotelsByDistance>();
+            services.AddScoped<PaginateHotels>();
             return services;
         }
     }

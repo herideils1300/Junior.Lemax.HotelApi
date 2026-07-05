@@ -9,6 +9,7 @@ namespace HotelApi.Api
         public double? RadiusInMiles { get; set; }
         public double? HighBudget { get; set; }
         public double? LowBudget { get; set; }
+        public int Page { get; set; }
 
         public bool IsQueryNull()
         {
