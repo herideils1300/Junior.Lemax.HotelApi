@@ -10,18 +10,18 @@ namespace HotelApi.Infrastructure.Persistance.Context.Variance
 {
     public class SqliteDbContext : GlobalContext
     {
-        private readonly IConfiguration _configuration;
-        public SqliteDbContext(IConfiguration configuration)
+        private readonly IConfiguration _config;
+        public SqliteDbContext(IConfiguration config)
             : base(new DbContextOptions<SqliteDbContext>())
         {
-            _configuration = configuration;
+            _config = config;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite(_configuration.GetConnectionString("SqliteDefault") ?? "");
+                optionsBuilder.UseSqlite(_config.GetConnectionString("SqliteDefault") ?? "");
             }
         }
     }

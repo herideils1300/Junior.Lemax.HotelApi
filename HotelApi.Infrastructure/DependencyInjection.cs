@@ -1,5 +1,8 @@
-﻿using HotelApi.Infrastructure.Persistance.Context;
+﻿using HotelApi.Application.Services.Hotels.Services;
+using HotelApi.Domain.Data.Users.Dto;
+using HotelApi.Infrastructure.Persistance.Context;
 using HotelApi.Infrastructure.Persistance.Context.Variance;
+using HotelApi.Infrastructure.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,11 +14,13 @@ namespace HotelApi.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDatabase(configuration);
+            services.AddScoped<FilterByRadiusAndPrice>();
             return services;
         }
 
         private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<GlobalContext>();
             services.AddDbContext<MssqlDbContext>();
             return services;
         }

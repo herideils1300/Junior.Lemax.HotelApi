@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HotelApi.Api;
-using HotelApi.Domain.Data.Loaction.Dto;
+using HotelApi.Domain.Data.Location.Dto;
 using HotelApi.Domain.Data.Users.Dto;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HotelApi.Infrastructure.Persistance.Context
 {
@@ -14,12 +15,8 @@ namespace HotelApi.Infrastructure.Persistance.Context
     {
         public GlobalContext(DbContextOptions options) : base(options)
         {
-        }
 
-        protected GlobalContext()
-        {
         }
-
         public DbSet<HotelDto> Hotels { get; set; }
         public DbSet<LocationDto> Locations { get; set; }
 

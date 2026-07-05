@@ -10,18 +10,17 @@ namespace HotelApi.Infrastructure.Persistance.Context.Variance
 {
     public class PostgreSqlDbContext : GlobalContext
     {
-        private readonly IConfiguration _configuration;
-
-        public PostgreSqlDbContext(IConfiguration configuration) : base(new DbContextOptions<PostgreSqlDbContext>())
+        private readonly IConfiguration _config;
+        public PostgreSqlDbContext(IConfiguration config) : base(new DbContextOptions<PostgreSqlDbContext>())
         {
-            _configuration = configuration;
+            _config = config;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostgresqlDefault") ?? "");
+                optionsBuilder.UseNpgsql(_config.GetConnectionString("PostgresqlDefault") ?? "");
             }
         }
     }

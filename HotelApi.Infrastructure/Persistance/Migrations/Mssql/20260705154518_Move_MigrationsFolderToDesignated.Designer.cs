@@ -4,16 +4,19 @@ using HotelApi.Infrastructure.Persistance.Context.Variance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HotelApi.Infrastructure.Migrations
+namespace HotelApi.Infrastructure.Persistance.Migrations.Mssql
 {
     [DbContext(typeof(MssqlDbContext))]
-    partial class MssqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705154518_Move_MigrationsFolderToDesignated")]
+    partial class Move_MigrationsFolderToDesignated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace HotelApi.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HotelApi.Domain.Data.Loaction.Dto.LocationDto", b =>
+            modelBuilder.Entity("HotelApi.Domain.Data.Location.Dto.LocationDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,11 +76,11 @@ namespace HotelApi.Infrastructure.Migrations
 
             modelBuilder.Entity("HotelApi.Domain.Data.Users.Dto.HotelDto", b =>
                 {
-                    b.HasOne("HotelApi.Domain.Data.Loaction.Dto.LocationDto", null)
+                    b.HasOne("HotelApi.Domain.Data.Location.Dto.LocationDto", null)
                         .WithMany("Hotels")
                         .HasForeignKey("LocationDtoId");
 
-                    b.HasOne("HotelApi.Domain.Data.Loaction.Dto.LocationDto", "Location")
+                    b.HasOne("HotelApi.Domain.Data.Location.Dto.LocationDto", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -86,7 +89,7 @@ namespace HotelApi.Infrastructure.Migrations
                     b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("HotelApi.Domain.Data.Loaction.Dto.LocationDto", b =>
+            modelBuilder.Entity("HotelApi.Domain.Data.Location.Dto.LocationDto", b =>
                 {
                     b.Navigation("Hotels");
                 });
