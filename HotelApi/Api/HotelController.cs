@@ -1,4 +1,6 @@
-﻿using HotelApi.Domain.Data.Location.Dto;
+﻿using HotelApi.Application.Services.Hotels;
+using HotelApi.Domain.Business.Validation.Abstraction;
+using HotelApi.Domain.Data.Location.Dto;
 using HotelApi.Domain.Data.Users.Dto;
 using HotelApi.Infrastructure.Persistance.Context.Variance;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,12 @@ namespace HotelApi.Api
     public class HotelController : ControllerBase
     {
         private readonly MssqlDbContext _context;
+        private readonly IValidator<HotelDto> _validator;
 
-        public HotelController(MssqlDbContext context)
+        public HotelController(MssqlDbContext context, IValidator<HotelDto> validator)
         {
             _context = context;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -65,8 +69,12 @@ namespace HotelApi.Api
         {
             try
             {
-                if (hotel == null)
-                    return BadRequest();
+                string? error = _validator.ValidateWithError(hotel);
+
+                if (error != null)
+                {
+                    return BadRequest(error);
+                }
 
                 _context.Hotels.Add(hotel);
                 _context.SaveChanges();
@@ -86,10 +94,14 @@ namespace HotelApi.Api
         {
             try
             {
-                if (hotel == null)
-                    return BadRequest();
+                string? error = _validator.ValidateWithError(hotel);
 
-                var existingHotel = _context.Hotels.Find(id);
+                if(error != null)
+                {
+                    return BadRequest(error);
+                }
+
+                HotelDto? existingHotel = _context.Hotels.Find(id);
 
                 if (existingHotel == null)
                     return NotFound();
@@ -97,14 +109,15 @@ namespace HotelApi.Api
                 existingHotel.Name = hotel.Name;
                 existingHotel.Price = hotel.Price;
 
-                if (_context.Locations.Where(location => location.Latitude == existingHotel.Location.Latitude
-                && location.Longitude == existingHotel.Location.Longitude).IsNullOrEmpty())
+                LocationDto? existingLocation = _context.Locations.Find(hotel.Location);
+
+                if (existingLocation == null)
                 {
                     existingHotel.Location = hotel.Location;
                 }
                 else
                 {
-                    existingHotel.Location = hotel.Location;
+                    existingHotel.Location = existingLocation;
                 }
 
                 _context.SaveChanges();
@@ -124,7 +137,7 @@ namespace HotelApi.Api
         {
             try
             {
-                var hotel = _context.Hotels.Find(id);
+                HotelDto? hotel = _context.Hotels.Find(id);
 
                 if (hotel == null)
                     return NotFound();
