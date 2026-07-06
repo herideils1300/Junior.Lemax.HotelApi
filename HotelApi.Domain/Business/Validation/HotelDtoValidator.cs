@@ -32,6 +32,12 @@ namespace HotelApi.Domain.Business.Validation
         //Implementation
         public string? ValidateWithError(HotelDto obj)
         {
+            if(obj == null)
+            {
+                return "Object passed to endpoint cannot be null";
+            }
+
+
             foreach (KeyValuePair<string, Predicate<HotelDto>> condition in conditions)
             {
                 if (!condition.Value(obj))
