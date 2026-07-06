@@ -1,5 +1,5 @@
 ﻿using HotelApi.Application.Services.Abstract;
-using HotelApi.Application.Services.Hotels.Services;
+using HotelApi.Application.Services.Hotels;
 using HotelApi.Domain.Data.Users.Dto;
 using Microsoft.Extensions.DependencyInjection;
 
