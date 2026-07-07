@@ -5,6 +5,7 @@ using HotelApi.Domain.Business.Validation.Abstraction;
 using HotelApi.Domain.Data.Location.Dto;
 using HotelApi.Domain.Data.Users.Dto;
 using HotelApi.Infrastructure.Persistance.Context.Variance;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ namespace HotelApi.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HotelController : ControllerBase
     {
         private readonly MssqlDbContext _context;

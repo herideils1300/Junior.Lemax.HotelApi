@@ -6,11 +6,13 @@ using HotelApi.Application.Services.Hotels.Validation;
 using HotelApi.Application.Services.Hotels.Pagination;
 using HotelApi.Application.Services.Hotels.Sorting;
 using HotelApi.Domain.Business.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelApi.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class QuerryController : ControllerBase
     {
         private readonly SortHotelsByDistance _distanceSort;
