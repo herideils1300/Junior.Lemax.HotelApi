@@ -7,7 +7,7 @@ using HotelApi.Api;
 using HotelApi.Application.Services.Abstract;
 using HotelApi.Domain.Data.Users.Dto;
 
-namespace HotelApi.Application.Services.Hotels
+namespace HotelApi.Application.Services.Hotels.Pagination
 {
     public class PaginateHotels : IApplicationService<HotelDto[]>
     {
@@ -22,7 +22,7 @@ namespace HotelApi.Application.Services.Hotels
         }
         public HotelDto[]? Execute()
         {
-            HotelDto[]? paginatedHotles = hotels.Skip((query.Page - 1) * query.Page).Take(10).ToArray();
+            HotelDto[]? paginatedHotles = hotels.Skip((query.Page - 1) * 10).Take(10).ToArray();
             return paginatedHotles;
         }
     }

@@ -11,7 +11,8 @@ namespace HotelApi.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDatabase(configuration);
-            services.AddScoped<GetFilterByRadiusAndPrice>();
+            services.AddScoped<GetHotelsByRadiusAndPrice>();
+            services.AddScoped<GetByPaginationOnly>();
             return services;
         }
 

@@ -14,7 +14,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
-builder.Services.AddMemoryCache();
+builder.Services.AddMemoryCache((options) =>
+{
+    options.ExpirationScanFrequency = TimeSpan.FromMinutes(3);
+    options.SizeLimit = 1024;
+});
 
 var app = builder.Build();
 

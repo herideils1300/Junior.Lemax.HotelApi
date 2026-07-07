@@ -1,4 +1,5 @@
 ﻿using HotelApi.Application.Services.Hotels;
+using HotelApi.Domain.Business.Logging;
 using HotelApi.Domain.Business.Validation.Abstraction;
 using HotelApi.Domain.Data.Location.Dto;
 using HotelApi.Domain.Data.Users.Dto;
@@ -83,8 +84,7 @@ namespace HotelApi.Api
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine(ex.Message);
+                CustomLogger.LogException(ex);
                 return StatusCode(500);
             }
         }
@@ -126,8 +126,7 @@ namespace HotelApi.Api
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine(ex.Message);
+                CustomLogger.LogException(ex);
                 return StatusCode(500);
             }
         }
@@ -149,8 +148,7 @@ namespace HotelApi.Api
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine(ex.Message);
+                CustomLogger.LogException(ex);
                 return StatusCode(500);
             }
         }

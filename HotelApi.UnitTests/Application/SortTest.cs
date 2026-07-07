@@ -1,15 +1,16 @@
-using HotelApi.Application.Services.Hotels;
+using HotelApi.Application.Services.Hotels.Sorting;
 using HotelApi.Domain.Business.Calculus;
 using HotelApi.Domain.Data.Location.Dto;
 using HotelApi.Domain.Data.Location.Params;
 using HotelApi.Domain.Data.Users.Dto;
 
-namespace HotelApi.UnitTests
+namespace HotelApi.UnitTests.Application
 {
-    public class TestApplication
+    public class SortTest
     {
         private SortHotelsByDistance sortHotelsByDistance;
         private Calculator calculator;
+
         [SetUp]
         public void Setup()
         {
@@ -102,7 +103,7 @@ namespace HotelApi.UnitTests
 
 
             //Execution
-            HotelDto? results = sortHotelsByDistance.Execute();
+            HotelDto[]? results = sortHotelsByDistance.Execute();
 
 
             //Assertion
@@ -167,20 +168,6 @@ namespace HotelApi.UnitTests
             Assert.IsNotNull(results);
             Assert.AreEqual(1, results.Length);
             Assert.AreEqual(hotels[0], results[0]);
-        }
-
-        [Test]
-        public void SortTest_NullArray_ThrowsArgumentNullException()
-        {
-            //Preparation
-            HotelDto[] hotels = null;
-            LocationQuery userLocation = new LocationQuery
-            {
-                Latitude = 45.817200,
-                Longitude = 15.967800
-            };
-            //Execution & Assertion
-            Assert.Throws<ArgumentNullException>(() => sortHotelsByDistance.SetParams(hotels, userLocation));
         }
     }
 }

@@ -8,26 +8,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelApi.Infrastructure.Services;
 
-public class GetFilterByRadiusAndPrice : IDbService<HotelDto[]>
+public class GetHotelsByRadiusAndPrice : IDbService<HotelDto[]>
 {
     private readonly Calculator calculator;
     private HotelQuery query;
-    private MssqlDbContext hotels;
-    public GetFilterByRadiusAndPrice()
+    private readonly MssqlDbContext _context;
+    public GetHotelsByRadiusAndPrice(MssqlDbContext context)
     {
+        _context = context;
         this.calculator = new Calculator();
     }
 
-    public void SetParameters(MssqlDbContext globalContext, HotelQuery query)
+    public void SetParameters(HotelQuery query)
     {
         this.query = query;
-        this.hotels = globalContext;
     }
 
     public HotelDto[]? Execute()
     {
-        return hotels.Hotels
-            .Where(hotel => hotel.Price < (decimal)(query.HighBudget ?? double.MaxValue) && hotel.Price > (decimal)(query.LowBudget ?? 0.0))
+        return _context.Hotels
+            .Where(hotel => (double)hotel.Price < query.HighBudget && (double)hotel.Price > query.LowBudget)
             .Include(hotel => hotel.Location)
             .AsEnumerable()
             .Where(hotel => calculator.CalculateDistance(query.UserLocation, new LocationQuery(hotel.Location)) < query.RadiusInMiles)

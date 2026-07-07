@@ -19,7 +19,7 @@ namespace HotelApi.Domain.Business.Calculus
             return Math.Sqrt(Math.Pow(latitudeDistance, 2) + Math.Pow(longitudeDistance, 2));
         }
 
-        public int SortLocation(LocationQuery userLocation, LocationQuery first, LocationQuery second)
+        public int DetermineLocationSort(LocationQuery userLocation, LocationQuery first, LocationQuery second)
         {
             return (CalculateDistance(userLocation, first) < CalculateDistance(userLocation, second)) ? -1 : 1;
         }

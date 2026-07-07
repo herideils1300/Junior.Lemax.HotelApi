@@ -19,6 +19,7 @@ namespace HotelApi.Infrastructure.Persistance.Context.Variance
                 optionsBuilder.UseSqlServer(
                     _config.GetConnectionString("DefaultMssql")
                     );
+                optionsBuilder.EnableSensitiveDataLogging(true);
             }
         }
     }

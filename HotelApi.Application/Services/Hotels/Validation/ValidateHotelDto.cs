@@ -5,17 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using HotelApi.Application.Services.Abstract;
 using HotelApi.Domain.Business.Validation;
+using HotelApi.Domain.Business.Validation.Abstraction;
 using HotelApi.Domain.Data.Users.Dto;
 
-namespace HotelApi.Application.Services.Hotels
+namespace HotelApi.Application.Services.Hotels.Validation
 {
     public class ValidateHotelDto : IApplicationService<string?>
     {
         private HotelDto hotel;
-        private readonly HotelDtoValidator hotelValidator;
+        private readonly IValidator<HotelDto> hotelValidator;
 
         public ValidateHotelDto() { 
-            this.hotelValidator = new HotelDtoValidator();
+            hotelValidator = new HotelDtoValidator();
         }
 
         public void SetParams(HotelDto hotel)

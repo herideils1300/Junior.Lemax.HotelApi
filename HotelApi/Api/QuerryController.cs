@@ -2,7 +2,10 @@
 using HotelApi.Domain.Data.Users.Dto;
 using HotelApi.Infrastructure.Persistance.Context.Variance;
 using Microsoft.AspNetCore.Mvc;
-using HotelApi.Application.Services.Hotels;
+using HotelApi.Application.Services.Hotels.Validation;
+using HotelApi.Application.Services.Hotels.Pagination;
+using HotelApi.Application.Services.Hotels.Sorting;
+using HotelApi.Domain.Business.Logging;
 
 namespace HotelApi.Api
 {
@@ -10,37 +13,57 @@ namespace HotelApi.Api
     [ApiController]
     public class QuerryController : ControllerBase
     {
-
-        private readonly MssqlDbContext _context;
         private readonly SortHotelsByDistance _distanceSort;
-        private readonly GetFilterByRadiusAndPrice _getFilteredByPrice;
+        private readonly GetHotelsByRadiusAndPrice _getByPriceAndRadius;
+        private readonly GetByPaginationOnly _getByPagination;
         private readonly PaginateHotels _paginateHotels;
+        private readonly ValidateHotelQuery _validate;
 
-        public QuerryController(MssqlDbContext context,
-            SortHotelsByDistance distanceSort,
-            GetFilterByRadiusAndPrice filterByRadius,
-            PaginateHotels paginateHotels)
+        public QuerryController(SortHotelsByDistance distanceSort,
+            GetHotelsByRadiusAndPrice filterByRadius,
+            GetByPaginationOnly getByPagination,
+            PaginateHotels paginateHotels,
+            ValidateHotelQuery validate)
         {
-            _context = context;
             _distanceSort = distanceSort;
-            _getFilteredByPrice = filterByRadius;
+            _getByPriceAndRadius = filterByRadius;
+            _getByPagination = getByPagination;
             _paginateHotels = paginateHotels;
+            _validate = validate;
         }
 
         [HttpPost]
         public ActionResult<HotelDto[]> QueryHotels([FromBody] HotelQuery query)
         {
+            try
+            {
+                _validate.SetParams(query);
+                string? error = _validate.Execute();
+                if (error != null)
+                {
+                    Console.Error.WriteLine(error);
+                    _getByPagination.SetParams(query);
+                    var allHotels = _getByPagination.Execute();
+                    return Ok(allHotels);
+                }
 
-            _getFilteredByPrice.SetParameters(_context, query);
-            HotelDto[]? hotels = _getFilteredByPrice.Execute();
+                _getByPriceAndRadius.SetParameters(query);
+                HotelDto[]? hotels = _getByPriceAndRadius.Execute();
 
-            _distanceSort.SetParams(hotels!, query.UserLocation);
-            hotels = _distanceSort.Execute();
+                _distanceSort.SetParams(hotels!, query.UserLocation);
+                hotels = _distanceSort.Execute();
 
-            _paginateHotels.SetParams(hotels!, query);
-            hotels = _paginateHotels.Execute();
+                _paginateHotels.SetParams(hotels!, query);
+                hotels = _paginateHotels.Execute();
 
-            return Ok(hotels);
+                return Ok(hotels);
+            }
+            catch (Exception e)
+            {
+
+                CustomLogger.LogException(e);
+                return StatusCode(500);
+            }
         }
     }
 }

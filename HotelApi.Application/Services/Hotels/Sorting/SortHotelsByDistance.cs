@@ -3,7 +3,7 @@ using HotelApi.Domain.Business.Calculus;
 using HotelApi.Domain.Data.Location.Params;
 using HotelApi.Domain.Data.Users.Dto;
 
-namespace HotelApi.Application.Services.Hotels
+namespace HotelApi.Application.Services.Hotels.Sorting
 {
     public class SortHotelsByDistance : IApplicationService<HotelDto[]>
     {
@@ -28,7 +28,7 @@ namespace HotelApi.Application.Services.Hotels
             List<HotelDto> listHotels = hotels.ToList();
 
             listHotels
-                .Sort((first, second) => calculator.SortLocation(
+                .Sort((first, second) => calculator.DetermineLocationSort(
                     userLocation,
                     new LocationQuery(first.Location),
                     new LocationQuery(second.Location)));
