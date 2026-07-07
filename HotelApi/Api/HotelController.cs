@@ -1,4 +1,5 @@
 ﻿using HotelApi.Application.Services.Hotels;
+using HotelApi.Application.Services.Hotels.Validation;
 using HotelApi.Domain.Business.Logging;
 using HotelApi.Domain.Business.Validation.Abstraction;
 using HotelApi.Domain.Data.Location.Dto;
@@ -17,9 +18,9 @@ namespace HotelApi.Api
     public class HotelController : ControllerBase
     {
         private readonly MssqlDbContext _context;
-        private readonly IValidator<HotelDto> _validator;
+        private readonly ValidateHotelDto _validator;
 
-        public HotelController(MssqlDbContext context, IValidator<HotelDto> validator)
+        public HotelController(MssqlDbContext context, ValidateHotelDto validator)
         {
             _context = context;
             _validator = validator;
@@ -70,7 +71,8 @@ namespace HotelApi.Api
         {
             try
             {
-                string? error = _validator.ValidateWithError(hotel);
+                _validator.SetParams(hotel);
+                string? error = _validator.Execute();
 
                 if (error != null)
                 {
@@ -94,9 +96,10 @@ namespace HotelApi.Api
         {
             try
             {
-                string? error = _validator.ValidateWithError(hotel);
+                _validator.SetParams(hotel);
+                string? error = _validator.Execute();
 
-                if(error != null)
+                if (error != null)
                 {
                     return BadRequest(error);
                 }

@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HotelApi.Application\HotelApi.Application.csproj" />
+    <ProjectReference Include="..\HotelApi.Auth\HotelApi.Auth.csproj" />
     <ProjectReference Include="..\HotelApi.Domain\HotelApi.Domain.csproj" />
     <ProjectReference Include="..\HotelApi.Infrastructure\HotelApi.Infrastructure.csproj" />
   </ItemGroup>
